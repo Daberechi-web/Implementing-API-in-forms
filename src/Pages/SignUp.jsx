@@ -15,8 +15,13 @@ const Signup = () => {
     confirmPassword: '',
     phone: '',
   });
+
+  const [loading, setLoading] = useState(false);
+
   const navigate = useNavigate();
+
   const [showPassword, setShowPassword] = useState(false);
+
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
 
   const handleChange = (e) => {
@@ -27,12 +32,14 @@ const Signup = () => {
     setShowPassword(!showPassword);
   };
 
-    const ConfirmPasswordVisibility = () => {
-      setShowConfirmPassword(!showConfirmPassword);
-    };
+  const ConfirmPasswordVisibility = () => {
+    setShowConfirmPassword(!showConfirmPassword);
+  };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    setLoading(true);
+
     console.log('Form submitted:', formData);
 
     try {
@@ -63,6 +70,8 @@ const Signup = () => {
     } catch (error) {
       console.error("Full errror response:", error?.response?.data);
       alert(error.response?.data?.message || "Registration failed.");
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -134,11 +143,12 @@ const Signup = () => {
           </button>
         </div>
 
-        
-
-        <button type="submit" className="signup-button">
-          Sign Up
+        <button type="submit" className="signup-button" disabled={loading}>
+          {loading ? "Signing up..." : "Sign Up"}
         </button>
+
+
+
       </form>
     </div>
   );

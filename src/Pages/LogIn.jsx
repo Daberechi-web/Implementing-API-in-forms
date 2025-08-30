@@ -7,12 +7,12 @@ import axios from 'axios';
 import { FaEye } from 'react-icons/fa';
 
 const Login = () => {
-   const [formData, setFormData] = useState({
+  const [formData, setFormData] = useState({
     identifier: "",
     password: ""
-   })
-   const navigate = useNavigate()
-   const handleChange = (e) => {
+  })
+  const navigate = useNavigate()
+  const handleChange = (e) => {
     setFormData({
       ...formData,
       [e.target.name]: e.target.value,
@@ -25,10 +25,14 @@ const Login = () => {
   const togglePasswordVisibility = () => {
     setShowPassword(!showPassword);
   };
- 
+
+  const [loading, setLoading] = useState(false);
+
+
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    setLoading(true);
 
     try {
 
@@ -58,10 +62,13 @@ const Login = () => {
       console.error(error);
       alert(error?.response?.data?.message || "Login failed!");
     }
+    finally {
+      setLoading(false);
+    }
   };
 
 
-  
+
   return (
     <div className="login-container">
       <form className="login-form" onSubmit={handleSubmit}>
@@ -97,9 +104,10 @@ const Login = () => {
 
         {error && <p className="error-text">{error}</p>}
 
-        <button type="submit" className="login-button">
-          Submit
+        <button type="submit" className="login-button" disabled={loading}>
+          {loading ? "Logging in..." : "Submit"}
         </button>
+
       </form>
     </div>
   );
